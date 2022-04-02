@@ -40,6 +40,12 @@ module DRC
 
         # No verbosity set in drc engine - we cannot use the engine's logger 
         RBA::Logger::verbosity &gt;= 10 &amp;&amp; RBA::Logger::info("Running #{@macro.path}")
+        if DRC::const_defined?(:Hook)
+          # hook on drc by mindon@live.com
+          if DRC::Hook.on(@drc, @macro)
+            return nil
+          end
+        end
         @drc.instance_eval(@macro.text, @macro.path)
 
       rescue =&gt; ex
